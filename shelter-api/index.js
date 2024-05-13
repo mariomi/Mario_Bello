@@ -11,6 +11,10 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Use middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 app.use(cors());
 app.use(express.json()); // Since bodyParser is now included in Express
 app.use(express.urlencoded({ extended: true }));

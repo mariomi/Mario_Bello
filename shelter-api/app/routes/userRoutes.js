@@ -106,7 +106,26 @@ router.put('/:id', userController.update);
  *         description: User deleted successfully.
  */
 router.delete('/:id', userController.delete);
-
+/**
+ * @swagger
+ * /api/users/{email}:
+ *   delete:
+ *     tags: [Users]
+ *     summary: login a user by email
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description:
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: User login successfully.
+ */
 router.post('/login', userController.login);
+
+router.post('/register', userController.register);
+
 
 module.exports = router;

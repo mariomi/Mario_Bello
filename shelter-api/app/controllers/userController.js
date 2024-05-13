@@ -1,13 +1,13 @@
 // userController.js
-
 const db = require('../config/database');
+const bcrypt = require('bcrypt');
 
 exports.findAll = async (req, res) => {
     try {
         const [users] = await db.query('SELECT * FROM Users');
-        res.json(users);
+        res.json({ message: "Users fetched successfully", data: users });
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({ message: "Error fetching users", error: error.message });
     }
 };
 
@@ -16,22 +16,23 @@ exports.findOne = async (req, res) => {
         const { id } = req.params;
         const [user] = await db.query('SELECT * FROM Users WHERE UserID = ?', [id]);
         if (user.length > 0) {
-            res.json(user[0]);
+            res.json({ message: "User found", data: user[0] });
         } else {
-            res.status(404).send('User not found');
+            res.status(404).json({ message: "User not found" });
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({ message: "Error fetching user", error: error.message });
     }
 };
 
 exports.create = async (req, res) => {
     try {
-        const { username, email, passwordHash, isAdmin } = req.body;
-        const [result] = await db.query('INSERT INTO Users (Username, Email, PasswordHash, IsAdmin) VALUES (?, ?, ?, ?)', [username, email, passwordHash, isAdmin]);
-        res.status(201).send(`User added with ID: ${result.insertId}`);
+        const { username, email, password, isAdmin } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const [result] = await db.query('INSERT INTO Users (Username, Email, PasswordHash, IsAdmin) VALUES (?, ?, ?, ?)', [username, email, hashedPassword, isAdmin]);
+        res.status(201).json({ message: "User added successfully", userId: result.insertId });
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({ message: "Error adding user", error: error.message });
     }
 };
 
@@ -40,9 +41,9 @@ exports.update = async (req, res) => {
         const { id } = req.params;
         const { username, email, passwordHash, isAdmin } = req.body;
         await db.query('UPDATE Users SET Username = ?, Email = ?, PasswordHash = ?, IsAdmin = ? WHERE UserID = ?', [username, email, passwordHash, isAdmin, id]);
-        res.send('User updated successfully.');
+        res.json({ message: "User updated successfully" });
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({ message: "Error updating user", error: error.message });
     }
 };
 
@@ -50,8 +51,52 @@ exports.delete = async (req, res) => {
     try {
         const { id } = req.params;
         await db.query('DELETE FROM Users WHERE UserID = ?', [id]);
-        res.send('User deleted successfully.');
+        res.json({ message: "User deleted successfully" });
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({ message: "Error deleting user", error: error.message });
+    }
+};
+
+exports.login = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const [results] = await db.query('SELECT * FROM Users WHERE Email = ?', [email]);
+        const user = results[0]; 
+
+        if (user) {
+            const passwordHash = user.PasswordHash.toString();
+
+            const validPassword = await bcrypt.compare(password, passwordHash);
+            if (validPassword) {
+                res.json({ message: "Login successful", user: user });
+            } else {
+                res.status(401).json({ message: "Invalid credentials" });
+            }
+        } else {
+            res.status(404).json({ message: "User not found" });
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).json({ message: "Error during login", error: error.message });
+    }
+};
+
+
+
+
+exports.register = async (req, res) => {
+    const { username, email, password } = req.body;
+    try {
+        const [userExists] = await db.query('SELECT * FROM Users WHERE Email = ?', [email]);
+        if (userExists.length > 0) {
+            return res.status(409).json({ message: "Email already in use" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await db.query('INSERT INTO Users (Username, Email, PasswordHash) VALUES (?, ?, ?)', [username, email, hashedPassword]);
+        res.status(201).json({ message: "User registered successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Error during registration", error: error.message });
     }
 };
