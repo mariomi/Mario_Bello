@@ -1,0 +1,230 @@
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+}
+
+header {
+    background-color: #1c1c1c;
+    color: #ffffff;
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .logo {
+    width: 150px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: #4CAF50;
+}
+
+.hero {
+    text-align: center;
+    padding: 100px 20px;
+    background: url('assets/images/hero-background.jpg') no-repeat center center/cover;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+}
+
+.hero .btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #4CAF50;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.hero .btn:hover {
+    background-color: #45a049;
+}
+
+main {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+.animal-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.animal {
+    background-color: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 300px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.animal:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.animal img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.animal h3 {
+    margin: 0.5rem 0;
+    color: #ffffff;
+}
+
+.animal p {
+    color: #aaaaaa;
+    margin: 0.5rem 0;
+}
+
+footer {
+    background-color: #1c1c1c;
+    color: #ffffff;
+    text-align: center;
+    padding: 1rem 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Stile per il pulsante dell'area personale */
+.user-area {
+    position: absolute;
+    top: 10px;
+    right: 70px;
+}
+
+.user-button {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background-color: #4CAF50;
+    color: #ffffff;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.user-button:hover {
+    background-color: #45a049;
+}
+
+/* Stile per il pulsante del menu */
+.menu-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.menu-button .btn {
+    --size: 40px;
+    width: var(--size);
+    height: var(--size);
+    position: relative;
+    display: grid;
+    place-content: center;
+}
+
+.menu-button svg {
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.cursor {
+    width: var(--cursor-size);
+    height: var(--cursor-size);
+    border-radius: 50%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    transform: translate(-50%, -50%);
+    background: var(--background);
+    mix-blend-mode: difference;
+    pointer-events: none;
+}
+
+.cta {
+    width: 100px;
+    position: fixed;
+    top: -999px;
+    left: -999px;
+    pointer-events: none;
+}
+
+/* Animazioni */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.hero {
+    animation: fadeIn 2s ease-in;
+}
+
+.animal {
+    animation: fadeIn 1.5s ease-in;
+}

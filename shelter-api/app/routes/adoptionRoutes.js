@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const adoptionController = require('../controllers/adoptionController');
+const authenticateToken = require('../middleware/auth'); // Assicurati che questo file middleware esista
 
 /**
  * @swagger
@@ -62,6 +63,7 @@ router.get('/:id', adoptionController.findOne);
  *         description: Adoption created successfully.
  */
 router.post('/', adoptionController.create);
+
 /**
  * @swagger
  * /api/adoptions/{id}:
@@ -105,5 +107,30 @@ router.put('/:id', adoptionController.update);
  *         description: Adoption deleted successfully.
  */
 router.delete('/:id', adoptionController.delete);
+
+
+/**
+ * @swagger
+ * /api/adoptions/my-adoptions:
+ *   get:
+ *     tags: [Adoptions]
+ *     summary: Get the logged-in user's adoptions
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Adoptions fetched successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Adoption'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Error fetching adoptions
+ */
+router.get('/my-adoptions', authenticateToken, adoptionController.findAllByUser);
 
 module.exports = router;

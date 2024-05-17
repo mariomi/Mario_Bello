@@ -55,3 +55,16 @@ exports.delete = async (req, res) => {
         res.status(500).send(error.message);
     }
 };
+
+exports.findAllByUser = async (req, res) => {
+    const userId = req.user.userId;
+    console.log(`Fetching adoptions for user ID: ${userId}`); // Log di debug
+  
+    try {
+      const [adoptions] = await db.query('SELECT * FROM Adoptions WHERE UserID = ?', [userId]);
+      res.json({ message: "Adoptions fetched successfully", data: adoptions });
+    } catch (error) {
+      console.error('Error fetching adoptions:', error);
+      res.status(500).json({ message: "Error fetching adoptions", error: error.message });
+    }
+  };

@@ -1,7 +1,8 @@
 // userController.js
+const jwt = require('jsonwebtoken'); 
 const db = require('../config/database');
 const bcrypt = require('bcrypt');
-
+const secretKey = process.env.SECRET_KEY || 'mario';
 exports.findAll = async (req, res) => {
     try {
         const [users] = await db.query('SELECT * FROM Users');
@@ -18,7 +19,7 @@ exports.findOne = async (req, res) => {
         if (user.length > 0) {
             res.json({ message: "User found", data: user[0] });
         } else {
-            res.status(404).json({ message: "User not found" });
+            res.status(404).json({ message: "User not found1" });
         }
     } catch (error) {
         res.status(500).json({ message: "Error fetching user", error: error.message });
@@ -66,23 +67,21 @@ exports.login = async (req, res) => {
 
         if (user) {
             const passwordHash = user.PasswordHash.toString();
-
             const validPassword = await bcrypt.compare(password, passwordHash);
             if (validPassword) {
-                res.json({ message: "Login successful", user: user });
+                const token = jwt.sign({ userId: user.UserID, isAdmin: user.IsAdmin }, secretKey, { expiresIn: '1h' });
+                res.json({ message: "Login successful", token });
             } else {
                 res.status(401).json({ message: "Invalid credentials" });
             }
         } else {
-            res.status(404).json({ message: "User not found" });
+            res.status(404).json({ message: "User not found2" });
         }
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ message: "Error during login", error: error.message });
     }
 };
-
-
 
 
 exports.register = async (req, res) => {
@@ -100,3 +99,42 @@ exports.register = async (req, res) => {
         res.status(500).json({ message: "Error during registration", error: error.message });
     }
 };
+
+exports.getProfile = async (req, res) => {
+    try {
+        res.json({ message: "PassProf"});
+        const { userId } = req.user;
+        const [user] = await db.query('SELECT * FROM Users WHERE UserID = ?', [userId]);
+        if (user.length > 0) {
+            res.json({ message: "Profile fetched successfully", data: user[0] });
+        } else {
+            res.status(404).json({ message: "User not found porcodio" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching profile", error: error.message });
+    }
+};
+
+exports.profile = async (req, res) => {
+    const userId = req.user.userId;
+    console.log(`Fetching profile for user ID: ${userId}`); // Log di debug
+  
+    try {
+      const [user] = await db.query('SELECT * FROM Users WHERE UserID = ?', [userId]);
+      console.log(`Database response for user ID ${userId}:`, user); // Log di debug
+      if (user.length > 0) {
+        res.json({ message: "User profile fetched successfully", data: user[0] });
+      } else {
+        console.log('User not found for ID:', userId); // Log di debug
+        res.status(404).json({ message: "User not found 3" });
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      res.status(500).json({ message: "Error fetching user profile", error: error.message });
+    }
+  };
+  
+
+
+
+

@@ -1,0 +1,246 @@
+body {
+  background-color: #000000; /* Cambia sfondo a nero */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.background {
+  width: 430px;
+  height: 520px;
+  position: absolute;
+  top: -20%;
+  left: -5%;
+  z-index: -1;
+  border-radius: 50%;
+  background: linear-gradient(to bottom right, #ff5f6d, #ffc371);
+}
+
+.shape {
+  height: 200px;
+  width: 200px;
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(to bottom right, #ff5f6d, #ffc371);
+}
+
+.shape:nth-child(2) {
+  top: 15%;
+  left: 55%;
+  background: linear-gradient(to bottom right, #ffc371, #ff5f6d);
+}
+
+form {
+  background-color: rgba(255, 255, 255, 0.1); /* Rende il box trasparente */
+  backdrop-filter: blur(10px); /* Aggiunge un effetto di sfocatura */
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  max-width: 350px; /* Riduce la larghezza del form */
+  height: 550px; /* Aumenta l'altezza del form per renderlo più allungato */
+  width: 100%;
+  margin: 20px;
+  text-align: center;
+  position: relative;
+}
+
+
+h3 {
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #ffffff; /* Cambia il colore del testo a bianco */
+}
+
+label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: block;
+  color: #ffffff; /* Cambia il colore del testo a bianco */
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: rgba(255, 255, 255, 0.2); /* Aggiunge trasparenza agli input */
+  color: #ffffff; /* Cambia il colore del testo a bianco */
+}
+
+buttonR {
+  width: auto;
+  padding: 8px 16px;
+  background: #ffc371;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  position: absolute;
+  top: 400px; /* Sposta sopra il pulsante login */
+  right: 10px; /* Allinea a destra */
+}
+
+buttonR:hover {
+  background: #ff5f6d;
+  color: white;
+}
+
+button {
+  position: relative;
+  padding: 12px 35px;
+  background: #fec195;
+  font-size: 17px;
+  font-weight: 500;
+  color: #181818;
+  border: 3px solid #fec195;
+  border-radius: 8px;
+  box-shadow: 0 0 0 #fec1958c;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%; /* Per allineare il bottone alla larghezza del form */
+}
+
+.star-1 {
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  width: 25px;
+  height: auto;
+  filter: drop-shadow(0 0 0 #fffdef);
+  z-index: -5;
+  transition: all 1s cubic-bezier(0.05, 0.83, 0.43, 0.96);
+}
+
+.star-2 {
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  width: 15px;
+  height: auto;
+  filter: drop-shadow(0 0 0 #fffdef);
+  z-index: -5;
+  transition: all 1s cubic-bezier(0, 0.4, 0, 1.01);
+}
+
+.star-3 {
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  width: 5px;
+  height: auto;
+  filter: drop-shadow(0 0 0 #fffdef);
+  z-index: -5;
+  transition: all 1s cubic-bezier(0, 0.4, 0, 1.01);
+}
+
+.star-4 {
+  position: absolute;
+  top: 20%;
+  left: 40%;
+  width: 8px;
+  height: auto;
+  filter: drop-shadow(0 0 0 #fffdef);
+  z-index: -5;
+  transition: all 0.8s cubic-bezier(0, 0.4, 0, 1.01);
+}
+
+.star-5 {
+  position: absolute;
+  top: 25%;
+  left: 45%;
+  width: 15px;
+  height: auto;
+  filter: drop-shadow(0 0 0 #fffdef);
+  z-index: -5;
+  transition: all 0.6s cubic-bezier(0, 0.4, 0, 1.01);
+}
+
+.star-6 {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  width: 5px;
+  height: auto;
+  filter: drop-shadow(0 0 0 #fffdef);
+  z-index: -5;
+  transition: all 0.8s ease;
+}
+
+button:hover {
+  background: transparent;
+  color: #fec195;
+  box-shadow: 0 0 25px #fec1958c;
+}
+
+button:hover .star-1 {
+  position: absolute;
+  top: -80%;
+  left: -30%;
+  width: 25px;
+  height: auto;
+  filter: drop-shadow(0 0 10px #fffdef);
+  z-index: 2;
+}
+
+button:hover .star-2 {
+  position: absolute;
+  top: -25%;
+  left: 10%;
+  width: 15px;
+  height: auto;
+  filter: drop-shadow(0 0 10px #fffdef);
+  z-index: 2;
+}
+
+button:hover .star-3 {
+  position: absolute;
+  top: 55%;
+  left: 25%;
+  width: 5px;
+  height: auto;
+  filter: drop-shadow(0 0 10px #fffdef);
+  z-index: 2;
+}
+
+button:hover .star-4 {
+  position: absolute;
+  top: 30%;
+  left: 80%;
+  width: 8px;
+  height: auto;
+  filter: drop-shadow(0 0 10px #fffdef);
+  z-index: 2;
+}
+
+button:hover .star-5 {
+  position: absolute;
+  top: 25%;
+  left: 115%;
+  width: 15px;
+  height: auto;
+  filter: drop-shadow(0 0 10px #fffdef);
+  z-index: 2;
+}
+
+button:hover .star-6 {
+  position: absolute;
+  top: 5%;
+  left: 60%;
+  width: 5px;
+  height: auto;
+  filter: drop-shadow(0 0 10px #fffdef);
+  z-index: 2;
+}
+
+.fil0 {
+  fill: #fffdef;
+}

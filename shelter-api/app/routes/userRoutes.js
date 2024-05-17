@@ -3,7 +3,39 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
+const authenticateToken = require('../middleware/auth');
 
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: User management
+ */
+
+/**
+ * @swagger
+ * /api/users/profile:
+ *   get:
+ *     tags: [Users]
+ *     summary: Get the logged-in user's profile
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User profile fetched successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Error fetching user profile
+ */
+
+router.get('/profile', authenticateToken, userController.getProfile);
 /**
  * @swagger
  * /api/users:
@@ -106,26 +138,67 @@ router.put('/:id', userController.update);
  *         description: User deleted successfully.
  */
 router.delete('/:id', userController.delete);
+
+
+
+
+
 /**
  * @swagger
- * /api/users/{email}:
- *   delete:
+ * /api/users/login:
+ *   post:
  *     tags: [Users]
- *     summary: login a user by email
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description:
- *         schema:
- *           type: integer
+ *     summary: Login a user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
  *     responses:
  *       200:
- *         description: User login successfully.
+ *         description: User logged in successfully.
+ *       401:
+ *         description: Invalid credentials
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Error during login
  */
 router.post('/login', userController.login);
 
+/**
+ * @swagger
+ * /api/users/register:
+ *   post:
+ *     tags: [Users]
+ *     summary: Register a new user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: User registered successfully.
+ *       409:
+ *         description: Email already in use
+ *       500:
+ *         description: Error during registration
+ */
 router.post('/register', userController.register);
-
 
 module.exports = router;

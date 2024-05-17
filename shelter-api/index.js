@@ -11,10 +11,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Use middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
 app.use(cors());
 app.use(express.json()); // Since bodyParser is now included in Express
 app.use(express.urlencoded({ extended: true }));
@@ -43,6 +39,12 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Root endpoint
 app.get('/', (req, res) => {
   res.send('Welcome to the Animal Shelter API!');
+});
+
+// Error handling middleware (should be after all route handlers)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
 
 // Listen on a port
