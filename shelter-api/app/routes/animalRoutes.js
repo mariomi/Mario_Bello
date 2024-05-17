@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const animalController = require('../controllers/animalController');
 
+
+
+router.get('/available', authenticateToken, animalsController.findAllAvailable);
+
 /**
  * @swagger
  * /api/animals:
@@ -20,6 +24,7 @@ const animalController = require('../controllers/animalController');
  *                 $ref: '#/components/schemas/Animal'
  */
 router.get('/', animalController.findAll);
+
 
 /**
  * @swagger

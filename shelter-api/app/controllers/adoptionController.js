@@ -11,6 +11,42 @@ exports.findAll = async (req, res) => {
     }
 };
 
+exports.adopt = async (req, res) => {
+    const userId = req.user.userId;
+    const { animalID } = req.body;
+
+    try {
+        const [animal] = await db.query('SELECT * FROM Animals WHERE AnimalID = ? AND Status = "available"', [animalID]);
+
+        if (animal.length === 0) {
+            return res.status(404).json({ message: 'Animal not found or already adopted' });
+        }
+
+        await db.query('INSERT INTO Adoptions (UserID, AnimalID, AdoptionDate) VALUES (?, ?, NOW())', [userId, animalID]);
+        await db.query('UPDATE Animals SET Status = "adopted" WHERE AnimalID = ?', [animalID]);
+
+        res.json({ message: 'Adoption successful' });
+    } catch (error) {
+        console.error('Error during adoption:', error);
+        res.status(500).json({ message: 'Error during adoption', error: error.message });
+    }
+};
+
+
+
+exports.findAllByUser = async (req, res) => {
+    const userId = req.user.userId;
+    console.log(`Fetching adoptions for user ID: ${userId}`); // Log di debug
+  
+    try {
+      const [adoptions] = await db.query('SELECT * FROM Adoptions WHERE UserID = ?', [userId]);
+      res.json({ message: "Adoptions fetched successfully", data: adoptions });
+    } catch (error) {
+      console.error('Error fetching adoptions:', error);
+      res.status(500).json({ message: "Error fetching adoptions", error: error.message });
+    }
+  };
+
 exports.findOne = async (req, res) => {
     try {
         const { id } = req.params;
@@ -56,15 +92,3 @@ exports.delete = async (req, res) => {
     }
 };
 
-exports.findAllByUser = async (req, res) => {
-    const userId = req.user.userId;
-    console.log(`Fetching adoptions for user ID: ${userId}`); // Log di debug
-  
-    try {
-      const [adoptions] = await db.query('SELECT * FROM Adoptions WHERE UserID = ?', [userId]);
-      res.json({ message: "Adoptions fetched successfully", data: adoptions });
-    } catch (error) {
-      console.error('Error fetching adoptions:', error);
-      res.status(500).json({ message: "Error fetching adoptions", error: error.message });
-    }
-  };

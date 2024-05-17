@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken'); 
 const db = require('../config/database');
 const bcrypt = require('bcrypt');
-const secretKey = process.env.SECRET_KEY || 'mario';
+const secretKey = process.env.SECRET_KEY || 'admin';
 exports.findAll = async (req, res) => {
     try {
         const [users] = await db.query('SELECT * FROM Users');
@@ -75,14 +75,13 @@ exports.login = async (req, res) => {
                 res.status(401).json({ message: "Invalid credentials" });
             }
         } else {
-            res.status(404).json({ message: "User not found2" });
+            res.status(404).json({ message: "User not found" });
         }
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ message: "Error during login", error: error.message });
     }
 };
-
 
 exports.register = async (req, res) => {
     const { username, email, password } = req.body;

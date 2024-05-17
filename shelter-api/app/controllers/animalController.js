@@ -1,5 +1,16 @@
 const db = require('../config/database');
 
+exports.findAllAvailable = async (req, res) => {
+  try {
+      const [animals] = await db.query('SELECT * FROM Animals WHERE Status = "available"');
+      res.json(animals);
+  } catch (error) {
+      console.error('Error fetching available animals:', error);
+      res.status(500).json({ message: 'Error fetching available animals', error: error.message });
+  }
+};
+
+
 exports.findAll = async (req, res) => {
   try {
     const [animals, _] = await db.query('SELECT * FROM Animals');

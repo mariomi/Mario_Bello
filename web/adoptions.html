@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adoptions</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/animals.css">
+</head>
+<body>
+    <header>
+        <h1>Adoptions</h1>
+        <nav>
+            <ul>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="adoptions.html">Adoptions</a></li>
+                <li><a href="logout.html">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div id="adoptionsList">
+            <h2>Available Animals for Adoption</h2>
+            <form id="adoptionForm" class="form-group">
+                <label for="animalSelect">Choose an animal:</label>
+                <select id="animalSelect" name="animalSelect" class="form-control">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+                <button type="submit" class="btn btn-primary">Adopt</button>
+            </form>
+            <div id="adoptionsContainer" class="adoptions-container"></div>
+        </div>
+    </main>
+    <script src="assets/js/adoptions.js"></script>
+</body>
+</html>

@@ -35,7 +35,7 @@ const authenticateToken = require('../middleware/auth');
  *         description: Error fetching user profile
  */
 
-router.get('/profile', authenticateToken, userController.getProfile);
+router.get('/profile', authenticateToken, userController.profile);
 /**
  * @swagger
  * /api/users:

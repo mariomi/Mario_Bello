@@ -1,8 +1,8 @@
+// auth.js
 const jwt = require('jsonwebtoken');
-const secretKey = process.env.SECRET_KEY || 'your_secret_key';
+const secretKey = process.env.SECRET_KEY || 'admin';
 
 const authenticateToken = (req, res, next) => {
-    console.log("passToken");
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   if (!token) {
@@ -13,10 +13,10 @@ const authenticateToken = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, secretKey);
     req.user = decoded;
-    console.log('Token decoded:', decoded); // Aggiungi questo log
+    console.log('Token decoded:', decoded); // Log di debug
     next();
   } catch (error) {
-    console.log('Invalid token'); // Log di debug
+    console.log('Invalid token:', error.message); // Log di debug
     res.status(403).json({ message: 'Invalid token' });
   }
 };
