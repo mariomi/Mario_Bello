@@ -2,14 +2,13 @@ const db = require('../config/database');
 
 exports.findAllAvailable = async (req, res) => {
   try {
-      const [animals] = await db.query('SELECT * FROM Animals WHERE Status = "available"');
+      const [animals] = await db.query('SELECT * FROM Animals WHERE AdoptionStatus = "Available"');
       res.json(animals);
   } catch (error) {
       console.error('Error fetching available animals:', error);
       res.status(500).json({ message: 'Error fetching available animals', error: error.message });
   }
 };
-
 
 exports.findAll = async (req, res) => {
   try {
@@ -20,10 +19,31 @@ exports.findAll = async (req, res) => {
   }
 };
 
+exports.finddis = async (req, res) => {
+  try {
+      let query = 'SELECT * FROM Animals';
+      const params = [];
+
+      if (req.query.status) {
+          query += ' WHERE AdoptionStatus = ?';
+          params.push(req.query.status);
+      }
+
+      const [animals] = await db.query(query, params);
+      res.json(animals);
+  } catch (error) {
+      res.status(500).send(error.message);
+  }
+};
+
 exports.findOne = async (req, res) => {
   try {
     const [animal, _] = await db.query('SELECT * FROM Animals WHERE AnimalID = ?', [req.params.id]);
-    res.json(animal[0]);
+    if (animal.length > 0) {
+      res.json(animal[0]);
+    } else {
+      res.status(404).json({ message: 'Animal not found' });
+    }
   } catch (error) {
     res.status(500).send({ message: error.message });
   }

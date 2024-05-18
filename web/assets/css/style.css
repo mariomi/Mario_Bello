@@ -93,6 +93,21 @@ main {
     padding: 2rem 0;
 }
 
+.about, .featured-animals, .testimonials, .contact-info {
+    margin: 2rem 0;
+}
+
+.about h2, .featured-animals h2, .testimonials h2, .contact-info h2 {
+    color: #4CAF50;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.about p, .contact-info p {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
 .animal-list {
     display: flex;
     flex-wrap: wrap;
@@ -132,6 +147,27 @@ main {
     margin: 0.5rem 0;
 }
 
+.testimonials-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.testimonial {
+    background-color: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    max-width: 600px;
+    text-align: center;
+}
+
+.testimonial p {
+    color: #aaaaaa;
+    font-style: italic;
+}
+
 footer {
     background-color: #1c1c1c;
     color: #ffffff;
@@ -142,7 +178,6 @@ footer {
     width: 100%;
 }
 
-/* Stile per il pulsante dell'area personale */
 .user-area {
     position: absolute;
     top: 10px;
@@ -168,7 +203,6 @@ footer {
     background-color: #45a049;
 }
 
-/* Stile per il pulsante del menu */
 .menu-button {
     position: absolute;
     top: 10px;
@@ -190,28 +224,6 @@ footer {
     pointer-events: none;
 }
 
-.cursor {
-    width: var(--cursor-size);
-    height: var(--cursor-size);
-    border-radius: 50%;
-    position: fixed;
-    left: 0;
-    top: 0;
-    transform: translate(-50%, -50%);
-    background: var(--background);
-    mix-blend-mode: difference;
-    pointer-events: none;
-}
-
-.cta {
-    width: 100px;
-    position: fixed;
-    top: -999px;
-    left: -999px;
-    pointer-events: none;
-}
-
-/* Animazioni */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -228,55 +240,457 @@ footer {
 .animal {
     animation: fadeIn 1.5s ease-in;
 }
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
+.animal-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+    margin-top: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 1rem;
+.animal-container:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.animal-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.animal-info {
+    margin-top: 20px;
+    text-align: center;
+    color: #e0e0e0;
+}
+
+.animal-info h2 {
+    color: #4CAF50;
+    margin-bottom: 10px;
+}
+
+.animal-info p {
+    margin: 10px 0;
+    font-size: 1rem;
+}
+/* Stile pulsante Adopt */
+button.adopt-btn {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    --primary-color: #4CAF50; /* Verde per il pulsante Adopt */
+    --hovered-color: #45a049;
+    position: relative;
+    display: flex;
+    font-weight: 600;
+    font-size: 20px;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  button.adopt-btn p {
+    margin: 0;
+    position: relative;
+    font-size: 20px;
+    color: var(--primary-color);
+  }
+  
+  button.adopt-btn::after {
+    position: absolute;
+    content: "";
+    width: 0;
+    left: 0;
+    bottom: -7px;
+    background: var(--hovered-color);
+    height: 2px;
+    transition: 0.3s ease-out;
+  }
+  
+  button.adopt-btn p::before {
+    position: absolute;
+    content: "Adopt";
+    width: 0%;
+    inset: 0;
+    color: var(--hovered-color);
+    overflow: hidden;
+    transition: 0.3s ease-out;
+  }
+  
+  button.adopt-btn:hover::after {
+    width: 100%;
+  }
+  
+  button.adopt-btn:hover p::before {
+    width: 100%;
+  }
+  
+  button.adopt-btn:hover svg {
+    transform: translateX(4px);
+    color: var(--hovered-color);
+  }
+  
+  button.adopt-btn svg {
+    color: var(--primary-color);
+    transition: 0.2s;
+    position: relative;
+    width: 15px;
+    transition-delay: 0.2s;
+  }
+  /* Stile per il riepilogo dell'adozione */
+.summary-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.animal-info, .user-info {
+    width: 48%;
+}
+
+.animal-info h2, .user-info h2 {
+    color: #4CAF50;
+    margin-bottom: 15px;
+}
+
+.animal-info p, .user-info p {
+    margin: 5px 0;
+    color: #e0e0e0;
+}
+
+.confirmation-area {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.adopt-btn {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    --primary-color: #4CAF50;
+    --hovered-color: #45a049;
+    position: relative;
+    display: flex;
+    font-weight: 600;
+    font-size: 20px;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.adopt-btn p {
+    margin: 0;
+    position: relative;
+    font-size: 20px;
+    color: var(--primary-color);
+}
+
+.adopt-btn::after {
+    position: absolute;
+    content: "";
+    width: 0;
+    left: 0;
+    bottom: -7px;
+    background: var(--hovered-color);
+    height: 2px;
+    transition: 0.3s ease-out;
+}
+
+.adopt-btn p::before {
+    position: absolute;
+    content: "Confirm Adoption";
+    width: 0%;
+    inset: 0;
+    color: var(--hovered-color);
+    overflow: hidden;
+    transition: 0.3s ease-out;
+}
+
+.adopt-btn:hover::after {
+    width: 100%;
+}
+
+.adopt-btn:hover p::before {
+    width: 100%;
+}
+
+.adopt-btn:hover svg {
+    transform: translateX(4px);
+    color: var(--hovered-color);
+}
+
+.adopt-btn svg {
+    color: var(--primary-color);
+    transition: 0.2s;
+    position: relative;
+    width: 15px;
+    transition-delay: 0.2s;
+}
+
+.thank-you-note {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 1rem;
+}
+/* Stili per il profilo utente */
+.user-info-card, .adoptions-list {
+    background-color: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #e0e0e0;
+}
+
+.adoption-card {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
-header nav ul {
-    list-style: none;
-    padding: 0;
+.adoption-card p {
+    margin: 5px 0;
 }
 
-header nav ul li {
-    display: inline;
-    margin-right: 1rem;
+.adoption-animal-photo {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-bottom: 10px;
 }
 
-header nav ul li a {
-    color: #fff;
-    text-decoration: none;
+.logout-btn {
+    background-color: #ff4c4c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
 }
 
-main {
-    padding: 1rem;
+.logout-btn:hover {
+    background-color: #e04343;
 }
 
-#adoptionsContainer {
+header .user-area {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
 }
 
-.adoption {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin: 1rem;
-    padding: 1rem;
-    flex: 1 1 calc(33.333% - 2rem);
+.edit-form.hidden {
+    display: none;
+}
+
+.edit-form label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #e0e0e0;
+}
+
+.edit-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+}
+
+.edit-btn, .save-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.edit-btn:hover, .save-btn:hover {
+    background-color: #45a049;
+}
+/* Aggiungi i seguenti stili */
+.hidden {
+    display: none;
+}
+
+.admin-btn {
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.admin-btn:hover {
+    background-color: #e68a00;
+}
+
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
-.adoption h3 {
-    margin-top: 0;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
- 
+
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+}
+
+header {
+    background-color: #1c1c1c;
+    color: #ffffff;
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .logo {
+    width: 150px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: #4CAF50;
+}
+
+main {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+h1 {
+    text-align: center;
+    color: #4CAF50;
+    margin-bottom: 1rem;
+}
+
+form {
+    background-color: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #e0e0e0;
+}
+
+form input, form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+}
+
+.submit-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #45a049;
+}
+
+footer {
+    background-color: #1c1c1c;
+    color: #ffffff;
+    text-align: center;
+    padding: 1rem 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+#formResponse {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 1rem;
+}
+
+#formResponse.hidden {
+    display: none;
+}

@@ -32,20 +32,22 @@ exports.adopt = async (req, res) => {
     }
 };
 
-
+const db = require('../config/database');
 
 exports.findAllByUser = async (req, res) => {
     const userId = req.user.userId;
     console.log(`Fetching adoptions for user ID: ${userId}`); // Log di debug
   
     try {
-      const [adoptions] = await db.query('SELECT * FROM Adoptions WHERE UserID = ?', [userId]);
+      const [adoptions] = await db.query('SELECT Adoptions.*, Animals.AnimalID, Animals.Name, Animals.Species, Animals.PhotoUrl FROM Adoptions JOIN Animals ON Adoptions.AnimalID = Animals.AnimalID WHERE UserID = ?', [userId]);
       res.json({ message: "Adoptions fetched successfully", data: adoptions });
     } catch (error) {
       console.error('Error fetching adoptions:', error);
       res.status(500).json({ message: "Error fetching adoptions", error: error.message });
     }
-  };
+};
+
+
 
 exports.findOne = async (req, res) => {
     try {
@@ -63,11 +65,11 @@ exports.findOne = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        const { userId, animalId, status } = req.body;
-        const [result] = await db.query('INSERT INTO Adoptions (UserID, AnimalID, Status) VALUES (?, ?, ?)', [userId, animalId, status]);
-        res.status(201).send(`Adoption created with ID: ${result.insertId}`);
+        const { userId, animalId } = req.body;
+        const [result] = await db.query('INSERT INTO Adoptions (UserID, AnimalID, Status, AdoptionDate) VALUES (?, ?, ?, NOW())', [userId, animalId, 'Pending']);
+        res.status(201).json({ message: `Adoption created with ID: ${result.insertId}` });
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -76,9 +78,9 @@ exports.update = async (req, res) => {
         const { id } = req.params;
         const { userId, animalId, status } = req.body;
         await db.query('UPDATE Adoptions SET UserID = ?, AnimalID = ?, Status = ? WHERE AdoptionID = ?', [userId, animalId, status, id]);
-        res.send('Adoption updated successfully.');
+        res.json({ message: 'Adoption updated successfully.' });
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -86,9 +88,8 @@ exports.delete = async (req, res) => {
     try {
         const { id } = req.params;
         await db.query('DELETE FROM Adoptions WHERE AdoptionID = ?', [id]);
-        res.send('Adoption deleted successfully.');
+        res.json({ message: 'Adoption deleted successfully.' });
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({ message: error.message });
     }
 };
-

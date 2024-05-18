@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Area - Animal Shelter</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img src="/assets/img/logosasdasd_senzaSfondo.png" alt="Animal Shelter Logo" class="logo">
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="animals.html">Animals</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                </ul>
+            </nav>
+            <div class="user-area">
+                <a href="profile.html" class="user-button" id="userButton"></a>
+                <button id="logoutButton" class="logout-btn">Logout</button>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <h1>Admin Area</h1>
+            <h2>Manage Animals</h2>
+            <button id="addAnimalButton" class="add-btn">Add Animal</button>
+            <div id="animalForm" class="hidden">
+                <label for="animalName">Name:</label>
+                <input type="text" id="animalName">
+                <label for="animalSpecies">Species:</label>
+                <input type="text" id="animalSpecies">
+                <label for="animalBreed">Breed:</label>
+                <input type="text" id="animalBreed">
+                <label for="animalAge">Age:</label>
+                <input type="number" id="animalAge">
+                <label for="animalGender">Gender:</label>
+                <input type="text" id="animalGender">
+                <label for="animalDescription">Description:</label>
+                <textarea id="animalDescription"></textarea>
+                <label for="animalPhotoUrl">Photo URL:</label>
+                <input type="text" id="animalPhotoUrl">
+                <button id="saveAnimalButton" class="save-btn">Save</button>
+            </div>
+            <div id="animalList" class="animal-list"></div>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Animal Shelter. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="assets/js/admin.js"></script>
+</body>
+</html>

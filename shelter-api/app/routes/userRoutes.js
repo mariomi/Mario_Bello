@@ -38,6 +38,50 @@ const authenticateToken = require('../middleware/auth');
 router.get('/profile', authenticateToken, userController.profile);
 /**
  * @swagger
+ * /api/users/profile:
+ *   put:
+ *     tags: [Users]
+ *     summary: Update the logged-in user's profile
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: New username
+ *               email:
+ *                 type: string
+ *                 description: New email
+ *             example:
+ *               username: newusername
+ *               email: newemail@example.com
+ *     responses:
+ *       200:
+ *         description: Profile updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Profile updated successfully.
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Error updating profile
+ */
+router.put('/profile', authenticateToken, userController.updateProfile);
+
+/**
+ * @swagger
  * /api/users:
  *   get:
  *     tags: [Users]
@@ -95,30 +139,6 @@ router.get('/:id', userController.findOne);
  */
 router.post('/', userController.create);
 
-/**
- * @swagger
- * /api/users/{id}:
- *   put:
- *     tags: [Users]
- *     summary: Update a user by ID
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: ID of the user to update
- *         schema:
- *           type: integer
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/User'
- *     responses:
- *       200:
- *         description: User updated successfully.
- */
-router.put('/:id', userController.update);
 
 /**
  * @swagger

@@ -1,10 +1,7 @@
-// adoptionRoutes.js
-
 const express = require('express');
 const router = express.Router();
 const adoptionController = require('../controllers/adoptionController');
 const authenticateToken = require('../middleware/auth'); // Assicurati che questo file middleware esista
-
 
 /**
  * @swagger
@@ -29,7 +26,6 @@ const authenticateToken = require('../middleware/auth'); // Assicurati che quest
  *         description: Error fetching adoptions
  */
 router.get('/my-adoptions', authenticateToken, adoptionController.findAllByUser);
-
 
 /**
  * @swagger
@@ -133,8 +129,5 @@ router.put('/:id', adoptionController.update);
  *         description: Adoption deleted successfully.
  */
 router.delete('/:id', adoptionController.delete);
-
-
-
 
 module.exports = router;

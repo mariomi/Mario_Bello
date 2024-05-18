@@ -3,92 +3,132 @@ document.addEventListener('DOMContentLoaded', async () => {
   console.log('Token retrieved from localStorage:', token); // Log di debug
 
   if (!token) {
-    console.log('No token found in localStorage, redirecting to login page'); // Log di debug
-    window.location.href = 'login.html';
-    return;
+      console.log('No token found in localStorage, redirecting to login page'); // Log di debug
+      window.location.href = 'login.html';
+      return;
+  }
+
+  const logoutButton = document.getElementById('logoutButton');
+  logoutButton.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      window.location.href = 'login.html';
+  });
+
+  const editButton = document.getElementById('editButton');
+  const saveButton = document.getElementById('saveButton');
+  const editForm = document.getElementById('editForm');
+  const userInfo = document.getElementById('userInfo');
+  const editUsername = document.getElementById('editUsername');
+  const editEmail = document.getElementById('editEmail');
+  const adminButton = document.getElementById('adminButton');
+
+  if (editButton && saveButton && editForm && userInfo && editUsername && editEmail) {
+      editButton.addEventListener('click', () => {
+          editForm.classList.remove('hidden');
+          editButton.classList.add('hidden');
+          const username = userInfo.querySelector('p strong:nth-child(1)').nextSibling.textContent.trim();
+          const email = userInfo.querySelector('p strong:nth-child(2)').nextSibling.textContent.trim();
+          editUsername.value = username;
+          editEmail.value = email;
+      });
+
+      saveButton.addEventListener('click', async () => {
+          const updatedUsername = editUsername.value;
+          const updatedEmail = editEmail.value;
+
+          try {
+              const response = await fetch('http://localhost:3000/api/users/profile', {
+                  method: 'PUT',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${token}`
+                  },
+                  body: JSON.stringify({ username: updatedUsername, email: updatedEmail })
+              });
+
+              if (response.ok) {
+                  userInfo.innerHTML = `
+                      <p><strong>Username:</strong> ${updatedUsername}</p>
+                      <p><strong>Email:</strong> ${updatedEmail}</p>
+                  `;
+                  editForm.classList.add('hidden');
+                  editButton.classList.remove('hidden');
+              } else {
+                  const errorData = await response.json();
+                  console.error('Failed to update profile:', errorData.message);
+              }
+          } catch (error) {
+              console.error('Error during updating profile:', error);
+          }
+      });
   }
 
   try {
-    // Fetch user profile
-    console.log('Fetching user profile...'); // Log di debug
-    const profileResponse = await fetch('http://localhost:3000/api/users/profile', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`
+      // Fetch user profile
+      console.log('Fetching user profile...');
+      const profileResponse = await fetch('http://localhost:3000/api/users/profile', {
+          method: 'GET',
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
+
+      console.log('Profile response status:', profileResponse.status);
+      const profileData = await profileResponse.json();
+      console.log('Profile response data:', profileData);
+
+      if (profileResponse.ok) {
+          userInfo.innerHTML = `
+              <p><strong>Username:</strong> ${profileData.data.Username}</p>
+              <p><strong>Email:</strong> ${profileData.data.Email}</p>
+          `;
+          if (profileData.data.IsAdmin) {
+              adminButton.style.display = 'block';
+          }
+      } else {
+          console.error('Failed to fetch profile:', profileData.message);
+          userInfo.innerText = profileData.message;
       }
-    });
-
-    console.log('Profile response status:', profileResponse.status); // Log di debug
-    console.log('Profile response headers:', profileResponse.headers); // Log di debug
-
-    const profileContentType = profileResponse.headers.get("content-type");
-    if (!profileContentType) {
-      console.error('Profile response does not have a content-type header'); // Log di debug
-      throw new TypeError("Profile response does not have a content-type header");
-    }
-
-    if (!profileContentType.includes("application/json")) {
-      console.error('Profile response is not JSON, content-type:', profileContentType); // Log di debug
-      throw new TypeError("Profile response is not JSON");
-    }
-
-    const profileData = await profileResponse.json();
-    console.log('Profile response data:', profileData); // Log di debug
-
-    if (profileResponse.ok) {
-      document.getElementById('userInfo').innerHTML = `
-        <p><strong>Username:</strong> ${profileData.data.Username}</p>
-        <p><strong>Email:</strong> ${profileData.data.Email}</p>
-      `;
-    } else {
-      console.error('Failed to fetch profile:', profileData.message); // Log di debug
-      document.getElementById('userInfo').innerText = profileData.message;
-    }
   } catch (error) {
-    console.error('Error during fetching profile:', error); // Log di debug
-    document.getElementById('userInfo').innerText = 'An error occurred while fetching the profile.';
+      console.error('Error during fetching profile:', error);
+      userInfo.innerText = 'An error occurred while fetching the profile.';
   }
 
   try {
-    // Fetch user adoptions
-    console.log('Fetching user adoptions...'); // Log di debug
-    const adoptionsResponse = await fetch('http://localhost:3000/api/adoptions/my-adoptions', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`
+      // Fetch user adoptions
+      console.log('Fetching user adoptions...');
+      const adoptionsResponse = await fetch('http://localhost:3000/api/adoptions/my-adoptions', {
+          method: 'GET',
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
+
+      console.log('Adoptions response status:', adoptionsResponse.status);
+      const adoptionsData = await adoptionsResponse.json();
+      console.log('Adoptions response data:', adoptionsData);
+
+      if (adoptionsResponse.ok) {
+          const adoptionsList = adoptionsData.data.map(adoption => {
+              console.log('Animal data for adoption:', adoption);
+
+              return `
+                  <div class="adoption-card">
+                      <img src="${adoption.PhotoUrl || 'assets/images/fallback.jpg'}" alt="Foto di ${adoption.Name}" class="adoption-animal-photo">
+                      <p><strong>Name:</strong> ${adoption.Name}</p>
+                      <p><strong>Species:</strong> ${adoption.Species}</p>
+                      <p><strong>Adoption Date:</strong> ${new Date(adoption.AdoptionDate).toLocaleDateString()}</p>
+                  </div>
+              `;
+          });
+
+          document.getElementById('userAdoptions').innerHTML = adoptionsList.join('');
+      } else {
+          console.error('Failed to fetch adoptions:', adoptionsData.message);
+          document.getElementById('userAdoptions').innerText = adoptionsData.message;
       }
-    });
-
-    console.log('Adoptions response status:', adoptionsResponse); // Log di debug
-    console.log('Adoptions response headers:', adoptionsResponse.headers); // Log di debug
-
-    const adoptionsContentType = adoptionsResponse.headers.get("content-type");
-    if (!adoptionsContentType) {
-      console.error('Adoptions response does not have a content-type header'); // Log di debug
-      throw new TypeError("Adoptions response does not have a content-type header");
-    }
-
-    if (!adoptionsContentType.includes("application/json")) {
-      console.error('Adoptions response is not JSON, content-type:', adoptionsContentType); // Log di debug
-      throw new TypeError("Adoptions response is not JSON");
-    }
-
-    const adoptionsData = await adoptionsResponse.json();
-    console.log('Adoptions response data:', adoptionsData); // Log di debug
-
-    if (adoptionsResponse.ok) {
-      const adoptions = adoptionsData.data.map(adoption => `
-        <p><strong>Animal ID:</strong> ${adoption.AnimalID}</p>
-        <p><strong>Adoption Date:</strong> ${adoption.AdoptionDate}</p>
-      `).join('');
-
-      document.getElementById('userAdoptions').innerHTML = adoptions;
-    } else {
-      console.error('Failed to fetch adoptions:', adoptionsData.message); // Log di debug
-      document.getElementById('userAdoptions').innerText = adoptionsData.message;
-    }
   } catch (error) {
-    console.error('Error during fetching adoptions:', error); // Log di debug
-    document.getElementById('userAdoptions').innerText = 'An error occurred while fetching the adoptions.';
+      console.error('Error during fetching adoptions:', error);
+      document.getElementById('userAdoptions').innerText = 'An error occurred while fetching the adoptions.';
   }
 });

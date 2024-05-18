@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const animalController = require('../controllers/animalController');
+const authenticateToken = require('../middleware/auth');
+const adminOnly = require('../middleware/admin');
 
-
-
-router.get('/available', authenticateToken, animalsController.findAllAvailable);
+router.get('/available', authenticateToken, animalController.findAllAvailable);
 
 /**
  * @swagger
@@ -23,8 +23,7 @@ router.get('/available', authenticateToken, animalsController.findAllAvailable);
  *               items:
  *                 $ref: '#/components/schemas/Animal'
  */
-router.get('/', animalController.findAll);
-
+router.get('/', authenticateToken, animalController.findAll);
 
 /**
  * @swagger
@@ -50,7 +49,7 @@ router.get('/', animalController.findAll);
  *       404:
  *         description: Animal not found.
  */
-router.get('/:id', animalController.findOne);
+router.get('/:id', authenticateToken, animalController.findOne);
 
 /**
  * @swagger
@@ -73,7 +72,34 @@ router.get('/:id', animalController.findOne);
  *             schema:
  *               $ref: '#/components/schemas/Animal'
  */
-router.post('/', animalController.create);
+router.post('/', authenticateToken, adminOnly, animalController.create);
+
+/**
+ * @swagger
+ * /api/animals/dis:
+ *   get:
+ *     tags: [Animals]
+ *     summary: Retrieve a list of animals based on their adoption status
+ *     parameters:
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [available, adopted]
+ *           description: The adoption status of the animals to filter
+ *     responses:
+ *       200:
+ *         description: A list of animals based on their adoption status
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Animal'
+ *       500:
+ *         description: Error fetching animals
+ */
+router.get('/dis', authenticateToken, adminOnly, animalController.finddis);
 
 /**
  * @swagger
@@ -103,7 +129,7 @@ router.post('/', animalController.create);
  *             schema:
  *               $ref: '#/components/schemas/Animal'
  */
-router.put('/:id', animalController.update);
+router.put('/:id', authenticateToken, adminOnly, animalController.update);
 
 /**
  * @swagger
@@ -125,6 +151,6 @@ router.put('/:id', animalController.update);
  *       404:
  *         description: Animal not found.
  */
-router.delete('/:id', animalController.delete);
+router.delete('/:id', authenticateToken, adminOnly, animalController.delete);
 
 module.exports = router;

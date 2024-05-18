@@ -37,16 +37,7 @@ exports.create = async (req, res) => {
     }
 };
 
-exports.update = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { username, email, passwordHash, isAdmin } = req.body;
-        await db.query('UPDATE Users SET Username = ?, Email = ?, PasswordHash = ?, IsAdmin = ? WHERE UserID = ?', [username, email, passwordHash, isAdmin, id]);
-        res.json({ message: "User updated successfully" });
-    } catch (error) {
-        res.status(500).json({ message: "Error updating user", error: error.message });
-    }
-};
+
 
 exports.delete = async (req, res) => {
     try {
@@ -133,6 +124,19 @@ exports.profile = async (req, res) => {
     }
   };
   
+  exports.updateProfile = async (req, res) => {
+    const { userId } = req.user; // Assumi che il middleware di autenticazione abbia aggiunto userId a req.user
+    const { username, email } = req.body;
+
+    try {
+        await db.query('UPDATE Users SET Username = ?, Email = ? WHERE UserID = ?', [username, email, userId]);
+        res.status(200).json({ message: 'Profile updated successfully.' });
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).json({ message: 'Error updating profile', error: error.message });
+    }
+};
+
 
 
 
