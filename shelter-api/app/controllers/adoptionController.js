@@ -32,8 +32,6 @@ exports.adopt = async (req, res) => {
     }
 };
 
-const db = require('../config/database');
-
 exports.findAllByUser = async (req, res) => {
     const userId = req.user.userId;
     console.log(`Fetching adoptions for user ID: ${userId}`); // Log di debug
