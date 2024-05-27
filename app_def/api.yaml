@@ -1,0 +1,310 @@
+openapi: 3.0.1
+info:
+  title: Shelter API
+  description: API for managing users, animals, and adoptions in an animal shelter.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: Local server
+
+paths:
+  /users:
+    get:
+      summary: Get all users
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Add a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /users/{id}:
+    get:
+      summary: Get a user by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: User ID
+      responses:
+        '200':
+          description: A user object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      summary: Update a user by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: User ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      summary: Delete a user by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: User ID
+      responses:
+        '200':
+          description: User deleted successfully
+  /users/authenticate:
+    post:
+      summary: Authenticate a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Authentication failed
+
+  /animals:
+    get:
+      summary: Get all animals
+      responses:
+        '200':
+          description: A list of animals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Animal'
+    post:
+      summary: Add a new animal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnimalInput'
+      responses:
+        '201':
+          description: Animal created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+  /animals/{id}:
+    get:
+      summary: Get an animal by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Animal ID
+      responses:
+        '200':
+          description: An animal object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+    put:
+      summary: Update an animal by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Animal ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnimalInput'
+      responses:
+        '200':
+          description: Animal updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+    delete:
+      summary: Delete an animal by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Animal ID
+      responses:
+        '200':
+          description: Animal deleted successfully
+
+  /adoptions:
+    post:
+      summary: Add a new adoption
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                AnimalID:
+                  type: integer
+                UserID:
+                  type: integer
+      responses:
+        '200':
+          description: Adoption created and animal status updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /adoptions/{userId}/animals:
+    get:
+      summary: Get adopted animals for a specific user
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: User ID
+      responses:
+        '200':
+          description: A list of adopted animals for the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Animal'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        UserID:
+          type: integer
+        username:
+          type: string
+        Email:
+          type: string
+        PasswordHash:
+          type: string
+        isAdmin:
+          type: boolean
+        RegistrationDate:
+          type: string
+          format: date-time
+    UserInput:
+      type: object
+      properties:
+        username:
+          type: string
+        Email:
+          type: string
+        PasswordHash:
+          type: string
+        isAdmin:
+          type: boolean
+    Animal:
+      type: object
+      properties:
+        AnimalID:
+          type: integer
+        Name:
+          type: string
+        Species:
+          type: string
+        Breed:
+          type: string
+        Age:
+          type: integer
+        Gender:
+          type: string
+        Description:
+          type: string
+        PhotoUrl:
+          type: string
+        AdoptionStatus:
+          type: string
+        ArrivalDate:
+          type: string
+          format: date-time
+    AnimalInput:
+      type: object
+      properties:
+        Name:
+          type: string
+        Species:
+          type: string
+        Breed:
+          type: string
+        Age:
+          type: integer
+        Gender:
+          type: string
+        Description:
+          type: string
+        PhotoUrl:
+          type: string
+        AdoptionStatus:
+          type: string
+        ArrivalDate:
+          type: string
+          format: date-time
